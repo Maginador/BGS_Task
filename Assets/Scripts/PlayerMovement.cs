@@ -10,8 +10,10 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] float movementSpeed, runSpeed;
     private Animator _animator;
+    private Rigidbody2D _rigidbody2D;
     private SpriteRenderer _spriteRenderer;
     private float updateThreashold = 0;
+    private  Vector2 move;
     void Awake()
     {
         inputActions = new PlayerActions();
@@ -21,6 +23,9 @@ public class PlayerMovement : MonoBehaviour
 
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _rigidbody2D = GetComponent<Rigidbody2D>();
+
+
     }
 
     private void OnSlowdown(InputAction.CallbackContext context)
@@ -36,7 +41,8 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 moveInput = inputActions.Movement.Movement.ReadValue<Vector2>();
         var runInput = inputActions.Movement.Sprint.ReadValue<float>();
-        Vector2 move = (1 + runInput) * Time.deltaTime * new Vector2(moveInput.x, moveInput.y);
+        move = (1 + runInput) * new Vector2(moveInput.x, moveInput.y)*movementSpeed;
+        _rigidbody2D.
         transform.Translate(move, Space.World);
 
         _animator.SetFloat("MoveSpeed", moveInput.magnitude);
@@ -55,5 +61,9 @@ public class PlayerMovement : MonoBehaviour
             _animator.SetFloat("Direction", direction);
         }
 
+    }
+    void FixedUpdate()
+    {
+        _rigidbody2D.velocity = move;
     }
 }
