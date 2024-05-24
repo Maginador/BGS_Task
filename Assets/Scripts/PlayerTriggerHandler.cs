@@ -11,31 +11,43 @@ public class PlayerTriggerHandler : MonoBehaviour
     [SerializeField] private UnityEvent[] _triggerEvents;
     [SerializeField] private GameObject _interactionCue;
     private PlayerActions inputAction;
+    private bool enableInteraction;
+    private List<Collider2D> triggers = new List<Collider2D>();
     private void Awake()
     {
         inputAction = new PlayerActions();
+        inputAction.Actions.ContextAction.performed += DoInteraction;
         inputAction.Enable();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         _interactionCue.SetActive(true);
+        enableInteraction = true;
+        triggers.Add(other);
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
         _interactionCue.SetActive(false);
+        enableInteraction = false;
+        triggers.Remove(other);
+
     }
 
-    private void OnTriggerStay2D(Collider2D other)
+    private void DoInteraction(InputAction.CallbackContext context)
     {
-        if (inputAction.Actions.ContextAction.ReadValue<float>() > 0){
-            for(int i = 0; i<_triggerTags.Length; i++){
-            if(other.CompareTag(_triggerTags[i]))
+        for (int i = 0; i < _triggerTags.Length; i++)
+        {
+            for (int o = 0; o < triggers.Count; o++)
             {
-                _triggerEvents[i]?.Invoke();
+                if (triggers[o].CompareTag(_triggerTags[i]))
+                {
+                    _triggerEvents[i]?.Invoke();
+                }
+
             }
         }
-        }
+
     }
 }

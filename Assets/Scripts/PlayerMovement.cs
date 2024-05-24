@@ -47,8 +47,8 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 direction = 0;
-                if (moveInput.x < 0) _spriteRenderer.flipX = true;
-                else _spriteRenderer.flipX = false;
+                if (moveInput.x < 0) transform.localScale = new Vector3(-1,1,1);
+                else transform.localScale = Vector3.one;
             }
             _animator.SetFloat("Direction", direction);
         }

@@ -10,6 +10,8 @@ public class StoreManager : MonoBehaviour
     [SerializeField] Transform storeGridRoot;
     [SerializeField] StorePreviewer previewer;
     [SerializeField] UIManager uiManager;
+        [SerializeField] PlayerOutfits playerOutfits;
+
     [SerializeField] GameObject purchaseButton;
     Dictionary<ProductSO, bool> purchasedProducts = new Dictionary<ProductSO, bool>();
     private void Start()
@@ -27,11 +29,11 @@ public class StoreManager : MonoBehaviour
 
     public void DoPurchase()
     {
-
         var so = previewer.GetCurrentProduct();
         Economy.Instance.SpendCurrency(so.price);
         purchasedProducts.Add(so, true);
         uiManager.CloseStore();
+        playerOutfits.SetOutfit(so);
     }
 
     public void Update()
