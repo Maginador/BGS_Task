@@ -14,11 +14,10 @@ public class PlayerMovement : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private float updateThreashold = 0;
     private  Vector2 move;
+    private bool playerLocked;
     void Awake()
     {
         inputActions = new PlayerActions();
-        inputActions.Movement.Sprint.performed += OnSprint;
-        inputActions.Movement.SlowWalk.performed += OnSlowdown;
         inputActions.Enable();
 
         _animator = GetComponent<Animator>();
@@ -28,17 +27,10 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    private void OnSlowdown(InputAction.CallbackContext context)
-    {
-        throw new NotImplementedException();
-    }
-
-    private void OnSprint(InputAction.CallbackContext context)
-    {
-        throw new NotImplementedException();
-    }
     void Update()
     {
+        if(playerLocked) return;
+
         Vector2 moveInput = inputActions.Movement.Movement.ReadValue<Vector2>();
         var runInput = inputActions.Movement.Sprint.ReadValue<float>();
         move = (1 + runInput) * movementSpeed * Time.deltaTime * new Vector2(moveInput.x, moveInput.y);
@@ -65,5 +57,10 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         _rigidbody2D.velocity = move;
+    }
+
+    public void LockPlayerMovement(bool lockToggle){
+
+        playerLocked = lockToggle;
     }
 }

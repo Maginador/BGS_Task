@@ -9,13 +9,14 @@ using UnityEngine.UI;
 
 public class GridButton : MonoBehaviour
 {
-     [SerializeField] private Button button;
+    [SerializeField] private Button button;
     [SerializeField] Image itemAsset;
     [SerializeField] TMP_Text itemPrice;
     ProductSO productData;
 
 
-    public void Setupbutton(ProductSO product, UnityAction<ProductSO> storeAction){
+    public void Setupbutton(ProductSO product, UnityAction<ProductSO> storeAction)
+    {
         itemAsset.sprite = product.asset;
         itemPrice.text = product.price.ToString();
         productData = product;
