@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 moveInput = inputActions.Movement.Movement.ReadValue<Vector2>();
         var runInput = inputActions.Movement.Sprint.ReadValue<float>();
-        move = (1 + runInput) * new Vector2(moveInput.x, moveInput.y)*movementSpeed;
+        move = (1 + runInput) * movementSpeed * Time.deltaTime * new Vector2(moveInput.x, moveInput.y);
         _rigidbody2D.
         transform.Translate(move, Space.World);
 
